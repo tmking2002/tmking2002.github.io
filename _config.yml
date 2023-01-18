@@ -1,0 +1,9 @@
+name: Tyson King
+description: Tyson's personal website.
+email: tmking4@ncsu.edu
+url: "http://tmking2002.github.io" 
+github_username: tmking2002
+
+# Build settings
+markdown: kramdown
+theme: minima
