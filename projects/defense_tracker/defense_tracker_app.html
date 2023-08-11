@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Styles for the popup box */
+    .popup {
+      position: fixed;
+      top: 15%;
+      left: 12%;
+      transform: translate(-50%, -50%);
+      background-color: #f9f9f9;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+    }
+
+    .popup label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .popup input[type="date"] {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    .popup input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+      
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 300px;
+    }
+
+    input[type="text"], select, input[type="submit"] {
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup">
+    <form id="dateForm">
+      <label for="date">Game date:</label>
+      <input type="date" id="date" name="date" required>
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+
+  <h2 style="text-align: center; font-size: 50px">Defense Tracker</h2>
+
+  <div id="tableContainer" style="display: none;">
+      <form id="statsForm">
+        <label for="playerName">Player:</label>
+        <select id="playerName" required>
+          <option value="">Select Player</option>
+          <option value="sileo">Jin Sileo</option>
+          <option value="edgmon">Ella Edgmon</option>
+          <option value="black">Mallorie Black</option>
+        </select>
+
+        <label for="playType">Play Type:</label>
+        <select id="playType" required>
+          <option value="">Select Type</option>
+          <option value="A">A: Fly Ball</option>
+          <option value="B">B: Backhand</option>
+          <option value="C">C: Chopper</option>
+          <option value="D">D: Wild Pitch</option>
+          <option value="E">E: Random Error</option>
+          <option value="F">F: Forehand</option>
+          <option value="G">G: 2 Hand Grounder</option>
+          <option value="L">L: Line Drive</option>        
+          <option value="P">P: Random above average out</option>
+          <option value="Q">Q: Bunt</option>
+          <option value="S">S: Steal</option>
+          <option value="T">T: Tipped ball (Catcher)</option>
+          <option value="V">V: Dirt ball read</option>
+          <option value="W">W: Ball off wall in OF</option>
+          <option value="X">X: Baserunning read</option>
+        </select>
+
+        <label for="converted">Converted:</label>
+        <select id="converted" required>
+          <option value="">Select Option</option>
+          <option value="+">+</option>
+          <option value="-">-</option>
+          <option value="0">0</option>
+          <option value="/">/</option>
+        </select>
+
+        <input type="submit" value="Submit">
+      </form>
+
+      <table id="statsTable">
+        <thead>
+          <tr>
+            <th>Player Name</th>
+            <th>Play Type</th>
+            <th>Converted</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+
+      <button id="exportButton" style="display: none;">Export to CSV</button> 
+    </div>
+    
+  <script>
+    // Get form values
+    const dateForm = document.getElementById('dateForm');
+    const statsForm = document.getElementById('statsForm');
+    const popup = document.querySelector('.popup');
+    const tableContainer = document.getElementById('tableContainer');
+    const tableBody = document.querySelector('#statsTable tbody');
+    const exportButton = document.getElementById('exportButton');  
+      
+    dateForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      dateForm.style.display = 'none';
+      tableContainer.style.display = 'block';
+    });
+    
+    let tableData = [
+        ['player', 'type', 'converted', 'date']
+    ];
+      
+    // Event listener for form submission
+    document.getElementById('statsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const playerName = document.getElementById('playerName').value;
+      const playType = document.getElementById('playType').value;
+      const converted = document.getElementById('converted').value;
+      const date = document.getElementById('date').value;
+
+      // Create new table row
+      const newRow = document.createElement('tr');
+      const playerNameCell = document.createElement('td');
+      playerNameCell.textContent = playerName;
+      const playTypeCell = document.createElement('td');
+      playTypeCell.textContent = playType;
+      const convertedCell = document.createElement('td');
+      convertedCell.textContent = converted;
+      const dateCell = document.createElement('td');
+      dateCell.textContent = date;
+
+      newRow.appendChild(playerNameCell);
+      newRow.appendChild(playTypeCell);
+      newRow.appendChild(convertedCell);
+      newRow.appendChild(dateCell);
+
+      // Append new row to the table body
+      tableBody.appendChild(newRow);
+
+      // Add data to tableData array
+      tableData.push([playerName, playType, converted, date]);
+
+      // Reset form fields
+      statsForm.reset();
+
+      // Show export button if table has data
+      if (tableData.length > 0) {
+        exportButton.style.display = 'block';
+      }
+        
+      // Reset form fields
+      document.getElementById('playerName').value = '';
+      document.getElementById('playType').value = '';
+      document.getElementById('converted').value = '';
+    });
+      
+    exportButton.addEventListener('click', function() {
+      exportToCsv('table.csv', tableData);
+    });
+      
+    // Function to export table data as CSV
+    function exportToCsv(filename, data) {
+      const csv = data.map(row => row.join(',')).join('\n');
+      const csvBlob = new Blob([csv], { type: 'text/csv' });
+
+      // Create a temporary link element to download the CSV file
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(csvBlob);
+      link.download = filename;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+
+      // Simulate a click on the link to trigger the download
+      link.click();
+
+      // Clean up
+      document.body.removeChild(link);
+    }
+      
+  </script>
+</body>
+</html>

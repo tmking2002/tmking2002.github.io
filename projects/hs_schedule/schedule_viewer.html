@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schedule Viewer</title>
+    <link rel="icon" type = image/png href="icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+    <style>
+    #table-container {
+      max-width: 800px; 
+      margin: 0 auto; 
+    }
+
+    table {
+        margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed; 
+    }
+
+    th,
+    td {
+        border: 1px solid #ccc;
+        padding: 4px;
+        text-align: center;
+        width: calc(100% / 3);
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+        
+    #dateInputs {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    #dateInputs label,
+    #dateInputs input {
+        margin: 0 10px;
+    }
+    
+    #teamInput {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    #teamInput label,
+    #teamInput input {
+        margin: 0 10px;
+    }
+    
+    
+        
+    .special-team {
+        font-weight: bold;
+        color: green;
+    }
+        
+    .both-special-teams {
+        background-color: gold;
+    }
+    </style>
+</head>
+<body>
+    <div id="dateInputs">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate">
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate">
+    </div>
+    
+    <div id="teamInput">
+        <label for="specialTeams">Teams:</label>
+        <select id="specialTeams" multiple>
+            <option value="Apalachee">Apalachee</option>
+            <option value="Buford">Buford</option>
+            <option value="Cherokee">Cherokee</option>
+            <option value="Columbus">Columbus</option>
+            <option value="Denmark">Denmark</option>
+            <option value="East Coweta">East Coweta</option>
+            <option value="Greater Atlanta Christian">Greater Atlanta Christian</option>
+            <option value="Kell">Kell</option>
+            <option value="Lowndes">Lowndes</option>
+            <option value="Milton">Milton</option>
+            <option value="Tattnall Square Academy">Tattnall Square Academy</option>
+            <option value="Woodstock">Woodstock</option>
+        </select>
+        <button id="clearTeamsButton">Clear Teams</button>
+        <label for="doubleGamesOnly">Double Games Only:</label>
+        <input type="checkbox" id="doubleGamesOnly">
+    </div>
+    
+    
+    <table id="scheduleTable">
+        <tr>
+            <th>Team 1</th>
+            <th>Team 2</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+    </table>
+
+    <script>
+        const filePath = 'schedule.csv'
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set time to midnight
+
+            const startDateInput = document.getElementById('startDate');
+            startDateInput.valueAsDate = today;
+
+            const endDateInput = document.getElementById('endDate');
+            const endOfYear = new Date(today.getFullYear(), 11, 31);
+            endDateInput.valueAsDate = endOfYear;
+            
+            const specialTeamsSelect = document.getElementById('specialTeams');
+            
+            const doubleGamesOnlyCheckbox = document.getElementById('doubleGamesOnly');
+            doubleGamesOnlyCheckbox.value = false;
+            
+            
+            fetch(filePath)
+                .then(response => response.text())
+                .then(csvData => {
+                    const games = parseCSV(csvData);
+
+                    const filteredGames = games.filter(game => {
+                        const gameDate = new Date(game.date);
+                        gameDate.setHours(0, 0, 0, 0); // Set time to midnight
+                        return gameDate >= today;
+                    });
+
+                    displayGames(filteredGames);
+
+                    startDateInput.addEventListener('change', filterGames);
+                    endDateInput.addEventListener('change', filterGames);
+                    specialTeamsSelect.addEventListener('change', filterGames);   
+                    doubleGamesOnlyCheckbox.addEventListener('change', filterGames);
+                    
+                    const clearTeamsButton = document.getElementById('clearTeamsButton'); // Get the Clear Teams button
+                    clearTeamsButton.addEventListener('click', clearSelectedTeams); // Add event listener for the button
+
+                    function clearSelectedTeams() {
+                        specialTeamsSelect.selectedIndex = -1; // Deselect all options
+                        filterGames(); // Call filterGames to reset the display
+                    }
+                    
+                    function filterGames() {
+                        const startDate = new Date(startDateInput.value + 'T00:00:00Z');
+                        startDate.setHours(0, 0, 0, 0);
+
+                        const endDate = new Date(endDateInput.value + 'T23:59:59.999Z'); // Use UTC format
+                        endDate.setHours(23, 59, 59, 999);
+
+                        const selectedSpecialTeams = Array.from(specialTeamsSelect.selectedOptions, option => option.value);
+                        const doubleGamesOnly = doubleGamesOnlyCheckbox.checked;
+
+                        const specialTeams = ["Tattnall Square Academy", "Denmark", "Woodstock", "Buford", "Cherokee", "East Coweta", "Columbus", "Milton", "Greater Atlanta Christian"];
+
+                        const filteredGames = games.filter(game => {
+                            const gameDate = new Date(game.date);
+                            gameDate.setHours(0, 0, 0, 0);
+                            const isBothSpecialTeams = specialTeams.includes(game.team1) && specialTeams.includes(game.team2);
+
+                            // Check if any special teams are selected or if it's a double game
+                            return (
+                                gameDate >= startDate &&
+                                gameDate <= endDate &&
+                                ((selectedSpecialTeams.length === 0 || selectedSpecialTeams.includes(game.team1) || selectedSpecialTeams.includes(game.team2)) &&
+                                (doubleGamesOnly === isBothSpecialTeams))
+                            );
+                        });
+
+                        displayGames(filteredGames);
+                    }
+                })
+                .catch(error => console.error('Error fetching CSV file:', error));
+        });
+
+
+        function parseCSV(content) {
+            const lines = content.trim().split('\n').slice(1, -1);
+            const games = [];
+
+            for (const line of lines) {
+                const [index, team1, team2, date, time] = line.split(',');
+                games.push({
+                    team1: team1.trim().slice(1, -1),
+                    team2: team2.trim().slice(1, -1),
+                    date: date.trim(),
+                    time: time.trim().slice(1, -1)
+                });
+            }
+
+            return games;
+        }
+
+        function displayGames(games) {
+            const specialTeams = [
+                { name: "Tattnall Square Academy", 
+                  url: "https://www.maxpreps.com/ga/macon/tattnall-square-academy-trojans/softball/fall/schedule/" },
+                { name: "Denmark", 
+                  url: "https://www.maxpreps.com/ga/alpharetta/denmark/softball/fall/schedule/" },
+                { name: "Woodstock", 
+                  url: "https://www.maxpreps.com/ga/woodstock/woodstock-wolverines/softball/fall/schedule/" },
+                { name: "Buford", 
+                  url: "https://www.maxpreps.com/ga/buford/buford-wolves/softball/fall/schedule/" },
+                { name: "Cherokee", 
+                  url: "https://www.maxpreps.com/ga/canton/cherokee-warriors/softball/fall/schedule/" },
+                { name: "East Coweta", 
+                  url: "https://www.maxpreps.com/ga/sharpsburg/east-coweta-indians/softball/fall/schedule/" },
+                { name: "Columbus", 
+                  url: "https://www.maxpreps.com/ga/columbus/columbus-blue-devils/softball/fall/schedule/" },
+                { name: "Milton", 
+                  url: "https://www.maxpreps.com/ga/milton/milton-eagles/softball/fall/schedule/" },
+                { name: "Greater Atlanta Christian", 
+                  url: "https://www.maxpreps.com/ga/norcross/greater-atlanta-christian-spartans/softball/fall/schedule/" },
+                { name: "Lowndes", 
+                  url: "https://www.maxpreps.com/ga/valdosta/lowndes-vikings/softball/fall/schedule/" },
+                { name: "Kell", 
+                  url: "https://www.maxpreps.com/ga/marietta/kell-longhorns/softball/fall/schedule/" },
+                { name: "Apalachee", 
+                  url: "https://www.maxpreps.com/ga/winder/apalachee-wildcats/softball/fall/schedule/" }
+            ];
+            const table = document.getElementById('scheduleTable');
+            table.innerHTML = `
+                <tr>
+                    <th>Home Team</th>
+                    <th>Away Team</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            `;
+
+            for (const game of games) {
+                const row = table.insertRow();
+                const team1IsSpecial = specialTeams.some(team => team.name === game.team1);
+                const team2IsSpecial = specialTeams.some(team => team.name === game.team2);
+
+                row.innerHTML = `
+                    <td class="${team1IsSpecial ? 'special-team' : ''}">
+                        ${team1IsSpecial ? `<a href="${specialTeams.find(team => team.name === game.team1).url}">${game.team1}</a>` : game.team1}
+                    </td>
+                    <td class="${team2IsSpecial ? 'special-team' : ''}">
+                        ${team2IsSpecial ? `<a href="${specialTeams.find(team => team.name === game.team2).url}">${game.team2}</a>` : game.team2}
+                    </td>
+                    <td>${new Date(game.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+                    <td>${game.time}</td>
+                `;
+
+                if (team1IsSpecial && team2IsSpecial) {
+                    row.classList.add('both-special-teams'); // Add a class for both special teams
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>

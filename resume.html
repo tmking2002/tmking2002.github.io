@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      background-color: #e4e8f0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+    }
+    
+    .section {
+      margin-bottom: 30px;
+    }
+    
+    .section h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .section h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .section p {
+      margin: 0;
+    }
+    
+    .contact-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: #0d4b82; /* Link color */
+      text-decoration: none; /* Remove underline */
+      transition: color 0.3s ease; /* Smooth color transition */
+    }
+
+    a:hover {
+      color: #23527c; /* Hover color */
+    }
+
+    a:focus {
+      outline: none; /* Remove focus outline */
+    }
+      
+    .column {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .column:last-child {
+      margin-right: 0; /* Remove the right margin from the last column */
+    }
+      
+    .entry {
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: #c3cad9;
+      display: flex;
+      align-items: center;
+    }
+
+    .entry i {
+      margin-right: 10px;
+    }
+
+    .entry p {
+      margin: 0;
+    }
+
+    
+    .work-experience {
+      margin-bottom: 30px;
+    }
+    
+    .work-experience .item {
+      margin-bottom: 20px;
+    }
+    
+    .work-experience .item h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .work-experience .item .meta {
+      color: #777;
+      padding-bottom: 10px;
+    }
+    
+    .skills ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .skills ul li {
+      background-color: #f1f1f1;
+      color: #333;
+      padding: 8px 15px;
+      border-radius: 4px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    @media only screen and (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      
+      .contact-info {
+        flex-direction: column;
+      }
+      
+      .contact-info .left,
+      .contact-info .right {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="section">
+      <h1>Tyson King</h1>
+      <br>
+      <h4>Georgia Tech Softball Graduate Assistant</h4>
+      <hr>
+      <br>
+      <div class="contact-info">
+        <div class="column">
+          <div class="entry">
+            <i class="fa fa-envelope"></i>
+            <a href="mailto:tmking2002@gmail.com">tmking2002@gmail.com</a>
+          </div>
+        </div>
+        <div class="column">
+          <div class="entry">
+            <i class="fa fa-user"></i>
+            <a href="https://tmking2002.github.io">tmking2002.github.io</a>
+          </div>
+        </div>
+      </div>
+        <div class="contact-info">
+          <div class="column">
+            <div class="entry">
+              <i class="fa fa-twitter"></i>
+              <a href="https://twitter.com/tking0426">tking0426</a>
+            </div>
+          </div>
+          <div class="column">
+            <div class="entry">
+              <i class="fa fa-github"></i>
+              <a href="https://www.github.com/tmking2002">tmking2002</a>
+            </div>
+          </div>
+        </div>
+    </div>
+    <hr>
+    <div class="section">
+      <h2>Work Experience</h2>
+      <div class="work-experience">
+        <div class="item">
+          <h3>Data Analysis Manager</h3>
+          <p class="meta">NC State Softball | September 2021 - May 2023</p>
+          <p>- Compiled and cleaned data from games and practices for analysis</p>
+          <p>- Wrote scripts to pull data and create reports for the coaching staff</p>
+          <p>- Assisted with on-field activities including soft toss, feeding machines, etc.</p>
+        </div>
+        <div class="item">
+          <h3>Spreadsheet Associate</h3>
+          <p class="meta">The Preiss Company | July 2022 - December 2022</p>
+          <p>- Helped transition leasing information from Google Sheets to a dataframe in R using sheets API scraping</p>
+          <p>- Created an RShiny app to be used by leasing managers showing leasing velocity charts, demographics information, and more</p>
+          <p>- Worked on an automatic program to send daily emails to property managers with important metrics</p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="section">
+      <h2>Education</h2>
+      <div class="work-experience">
+        <div class="item">
+          <h3>North Carolina State University</h3>
+          <p class="meta">August 2020 - May 2023</p>
+          <p>B.S. Statistics, Minor in Mathematics</p>
+        </div>
+        <div class="item">
+          <h3>Georgia Institute of Technology</h3>
+          <p class="meta">August 2023 - May 2025</p>
+          <p>M.S. in Analytics</p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="section">
+      <h2>Projects</h2>
+      <div class="work-experience">
+        <div class="item">
+          <h3><a href="https://github.com/sportsdataverse/softballR"><i class="fa fa-github"></i></a> softballR Package</h3>
+          <p>I created an R package with the purpose of providing clean and easily accessible softball data to as many people as possible. As of right now, box score data, rankings, game scores, and much more can be loaded into any R environment. </p>
+        </div>
+        <div class="item">
+          <h3><a href="https://twitter.com/POW_Predictor"><i class="fa fa-twitter"></i></a> NBA Player of the Week Predictor Bot</h3>
+          <p>I created a Twitter bot that posted my top 5 favorites for Eastern and Western conference players of the week every week of the NBA season based on a logistic regression model using the past two decades as training data. Unfortunately due to twitter's new rules for APIs, it is now inactive.</p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="section">
+      <h2>Skills</h2>
+      <div class="skills">
+        <ul>
+          <li>R</li>
+          <li>R Shiny</li>
+          <li>Python</li>
+          <li>Java</li>
+          <li>SQL</li>
+          <li>Vue</li>
+          <li>HTML</li>  
+          <li>Git</li>
+          <li>Statistical Modeling</li>
+          <li>Data Visualization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
