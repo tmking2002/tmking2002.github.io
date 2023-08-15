@@ -10,7 +10,7 @@
       font-family: Arial, sans-serif;
       background-color: #f1f1f1;
       margin: 0;
-      padding: 20px;
+      padding: 10px;
     }
     
     .container {
@@ -18,10 +18,11 @@
       max-width: 800px;
       margin: 0 auto;
       padding: 40px;
+      padding-top: 10px;
       border-radius: 4px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    
+
     h1, h2, h3, h4, h5, h6 {
       margin: 0;
     }
@@ -29,23 +30,27 @@
     h1, h4 {
       text-align: center;
     }
+
     .section {
-      margin-bottom: 30px;
+      margin-bottom: 0px;
     }
     
     .section h2 {
-      font-size: 24px;
+      font-size: 20px;
+      text-decoration-line: underline;
+      text-decoration-thickness: 1px;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
     
     .section h3 {
       font-size: 18px;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
     
     .section p {
+      font-size: 12px;
       margin: 0;
     }
     
@@ -56,17 +61,17 @@
     }
 
     a {
-      color: black; /* Link color */
-      text-decoration: none; /* Remove underline */
-      transition: color 0.3s ease; /* Smooth color transition */
+      color: black; 
+      text-decoration: none; 
+      transition: color 0.3s ease;
     }
 
     a:hover {
-      color: #23527c; /* Hover color */
+      color: #23527c; 
     }
 
     a:focus {
-      outline: none; /* Remove focus outline */
+      outline: none; 
     }
       
     .column {
@@ -75,7 +80,7 @@
     }
 
     .column:last-child {
-      margin-right: 0; /* Remove the right margin from the last column */
+      margin-right: 0; 
     }
       
     .entry {
@@ -124,13 +129,15 @@
     }
     
     .skills ul li {
-      background-color: #f1f1f1;
-      color: #333;
-      padding: 8px 15px;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      outline: 3px solid black;
+      outline-width: 1px;
+      padding: 2px 10px;
       border-radius: 4px;
-      margin-right: 10px;
+      margin-right: 5px;
       margin-bottom: 10px;
-      font-size: 14px;
+      font-size: 12px;
     }
     
     @media only screen and (max-width: 600px) {
@@ -223,7 +230,6 @@
           <li>Python</li>
           <li>Java</li>
           <li>SQL</li>
-          <li>Vue</li>
           <li>HTML</li>  
           <li>Git</li>
           <li>Statistical Modeling</li>
