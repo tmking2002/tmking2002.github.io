@@ -8,10 +8,10 @@ get_schedule <- function(maxpreps_url, team_name) {
   raw <- maxpreps_url %>% 
     read_html()
   
-  schedule <- data.frame(opponent = raw %>% html_elements(css = ".bewJwc, .hCLyeW") %>% html_text2(),
-                         date = raw %>% html_elements(css = ".cYQCvT.heading_100_bold") %>% html_text2() %>% word(2) %>% paste0(., "/2023") %>% anydate(),
-                         time = raw %>% html_elements(css = ".cYQCvT.detail_90_reg") %>% html_text2(),
-                         location = raw %>% html_elements(css = ".ghZqMN.detail_90_reg") %>% html_text2() %>% word(1)) %>% 
+  schedule <- data.frame(opponent = raw %>% html_elements(css = ".heading_100_semibold :nth-child(1)") %>% html_text2(),
+                         date = raw %>% html_elements(css = ".jntfAA.heading_100_bold") %>% html_text2() %>% word(2) %>% paste0(., "/2023") %>% anydate(),
+                         time = raw %>% html_elements(css = ".jntfAA.detail_90_reg") %>% html_text2(),
+                         location = raw %>% html_elements(css = ".hjdrnO.detail_90_reg") %>% html_text2() %>% word(1)) %>% 
     rowwise() %>% 
     mutate(home_team = ifelse(location == "Home", team_name, opponent),
            away_team = ifelse(location == "Home", opponent, team_name),
@@ -35,9 +35,10 @@ atl_christian <- get_schedule("https://www.maxpreps.com/ga/norcross/greater-atla
 kell <- get_schedule("https://www.maxpreps.com/ga/marietta/kell-longhorns/softball/fall/schedule/", "Kell")
 lowndes <- get_schedule("https://www.maxpreps.com/ga/valdosta/lowndes-vikings/softball/fall/schedule/", "Lowndes")
 apalachee <- get_schedule("https://www.maxpreps.com/ga/winder/apalachee-wildcats/softball/fall/schedule/", "Apalachee")
+north_hall <- get_schedule("https://www.maxpreps.com/ga/gainesville/north-hall-trojans/softball/fall/schedule/", "North Hall")
 
 
-total_schedule <- rbind(tattnall, denmark, woodstock, buford, cherokee, east_coweta, columbus, milton, atl_christian, kell, lowndes, apalachee) %>% 
+total_schedule <- rbind(tattnall, denmark, woodstock, buford, cherokee, east_coweta, columbus, milton, atl_christian, kell, lowndes, apalachee, north_hall) %>% 
   distinct() %>% 
   arrange(date, time)
 

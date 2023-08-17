@@ -89,6 +89,7 @@
             <option value="Kell">Kell</option>
             <option value="Lowndes">Lowndes</option>
             <option value="Milton">Milton</option>
+            <option value="North Hall">North Hall</option>
             <option value="Tattnall Square Academy">Tattnall Square Academy</option>
             <option value="Woodstock">Woodstock</option>
         </select>
@@ -150,6 +151,7 @@
 
                     function clearSelectedTeams() {
                         specialTeamsSelect.selectedIndex = -1; // Deselect all options
+                        doubleGamesOnlyCheckbox.checked = false;
                         filterGames(); // Call filterGames to reset the display
                     }
                     
@@ -163,7 +165,7 @@
                         const selectedSpecialTeams = Array.from(specialTeamsSelect.selectedOptions, option => option.value);
                         const doubleGamesOnly = doubleGamesOnlyCheckbox.checked;
 
-                        const specialTeams = ["Tattnall Square Academy", "Denmark", "Woodstock", "Buford", "Cherokee", "East Coweta", "Columbus", "Milton", "Greater Atlanta Christian"];
+                        const specialTeams = ["Apalachee", "Buford", "Cherokee", "Columbus", "Denmark", "East Coweta", "Greater Atlanta Christian", "Kell", "Lowndes", "Milton", "North Hall", "Tattnall Square Academy", "Woodstock"];
 
                         const filteredGames = games.filter(game => {
                             const gameDate = new Date(game.date);
@@ -174,8 +176,8 @@
                             return (
                                 gameDate >= startDate &&
                                 gameDate <= endDate &&
-                                ((selectedSpecialTeams.length === 0 || selectedSpecialTeams.includes(game.team1) || selectedSpecialTeams.includes(game.team2)) &&
-                                (doubleGamesOnly === isBothSpecialTeams))
+                                (selectedSpecialTeams.length === 0 || selectedSpecialTeams.includes(game.team1) || selectedSpecialTeams.includes(game.team2)) &&
+                                (!doubleGamesOnly || isBothSpecialTeams)
                             );
                         });
 
@@ -228,7 +230,9 @@
                 { name: "Kell", 
                   url: "https://www.maxpreps.com/ga/marietta/kell-longhorns/softball/fall/schedule/" },
                 { name: "Apalachee", 
-                  url: "https://www.maxpreps.com/ga/winder/apalachee-wildcats/softball/fall/schedule/" }
+                  url: "https://www.maxpreps.com/ga/winder/apalachee-wildcats/softball/fall/schedule/" },
+                { name: "North Hall",
+                    url: "https://www.maxpreps.com/ga/gainesville/north-hall-trojans/softball/fall/schedule/" }
             ];
             const table = document.getElementById('scheduleTable');
             table.innerHTML = `
