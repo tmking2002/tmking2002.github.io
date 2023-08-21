@@ -36,9 +36,9 @@ kell <- get_schedule("https://www.maxpreps.com/ga/marietta/kell-longhorns/softba
 lowndes <- get_schedule("https://www.maxpreps.com/ga/valdosta/lowndes-vikings/softball/fall/schedule/", "Lowndes")
 apalachee <- get_schedule("https://www.maxpreps.com/ga/winder/apalachee-wildcats/softball/fall/schedule/", "Apalachee")
 north_hall <- get_schedule("https://www.maxpreps.com/ga/gainesville/north-hall-trojans/softball/fall/schedule/", "North Hall")
+vidalia <- get_schedule("https://www.maxpreps.com/ga/vidalia/vidalia-indians/softball/fall/schedule/", "Vidalia")
 
-
-total_schedule <- rbind(tattnall, denmark, woodstock, buford, cherokee, east_coweta, columbus, milton, atl_christian, kell, lowndes, apalachee, north_hall) %>% 
+total_schedule <- rbind(tattnall, denmark, woodstock, buford, cherokee, east_coweta, columbus, milton, atl_christian, kell, lowndes, apalachee, north_hall, vidalia) %>% 
   distinct() %>% 
   arrange(date, time)
 

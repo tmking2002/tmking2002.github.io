@@ -91,6 +91,7 @@
             <option value="Milton">Milton</option>
             <option value="North Hall">North Hall</option>
             <option value="Tattnall Square Academy">Tattnall Square Academy</option>
+            <option value="Vidalia">Vidalia</option>
             <option value="Woodstock">Woodstock</option>
         </select>
         <button id="clearTeamsButton">Clear Teams</button>
@@ -165,7 +166,7 @@
                         const selectedSpecialTeams = Array.from(specialTeamsSelect.selectedOptions, option => option.value);
                         const doubleGamesOnly = doubleGamesOnlyCheckbox.checked;
 
-                        const specialTeams = ["Apalachee", "Buford", "Cherokee", "Columbus", "Denmark", "East Coweta", "Greater Atlanta Christian", "Kell", "Lowndes", "Milton", "North Hall", "Tattnall Square Academy", "Woodstock"];
+                        const specialTeams = ["Apalachee", "Buford", "Cherokee", "Columbus", "Denmark", "East Coweta", "Greater Atlanta Christian", "Kell", "Lowndes", "Milton", "North Hall", "Tattnall Square Academy", "Vidalia", "Woodstock"];
 
                         const filteredGames = games.filter(game => {
                             const gameDate = new Date(game.date);
@@ -232,7 +233,9 @@
                 { name: "Apalachee", 
                   url: "https://www.maxpreps.com/ga/winder/apalachee-wildcats/softball/fall/schedule/" },
                 { name: "North Hall",
-                    url: "https://www.maxpreps.com/ga/gainesville/north-hall-trojans/softball/fall/schedule/" }
+                    url: "https://www.maxpreps.com/ga/gainesville/north-hall-trojans/softball/fall/schedule/" },
+                { name: "Vidalia",
+                    url: "https://www.maxpreps.com/ga/vidalia/vidalia-indians/softball/fall/schedule/" }
             ];
             const table = document.getElementById('scheduleTable');
             table.innerHTML = `
