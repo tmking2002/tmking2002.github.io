@@ -191,8 +191,6 @@
       const type = document.getElementById('type').value;
       const date = document.getElementById('date').value;
 
-      console.log(type)
-
       // Create new table row
       const newRow = document.createElement('tr');
       const playerNameCell = document.createElement('td');
@@ -218,16 +216,12 @@
       // Add data to tableData array
       tableData.push([playerName, playType, converted, type, date]);
 
-      // Reset form fields
-      statsForm.reset();
-
       // Show export button if table has data
       if (tableData.length > 0) {
         exportButton.style.display = 'block';
       }
         
       // Reset form fields
-      document.getElementById('playerName').value = '';
       document.getElementById('playType').value = '';
       document.getElementById('converted').value = '';
     });
