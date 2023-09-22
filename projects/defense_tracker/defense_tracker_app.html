@@ -150,6 +150,7 @@
             <th>Player Name</th>
             <th>Play Type</th>
             <th>Converted</th>
+            <th>Type</th>
             <th>Date</th>
           </tr>
         </thead>
@@ -177,7 +178,7 @@
     });
     
     let tableData = [
-        ['player', 'type', 'converted', 'date']
+        ['player', 'type', 'converted', 'type', 'date']
     ];
       
     // Event listener for form submission
@@ -187,7 +188,10 @@
       const playerName = document.getElementById('playerName').value;
       const playType = document.getElementById('playType').value;
       const converted = document.getElementById('converted').value;
+      const type = document.getElementById('type').value;
       const date = document.getElementById('date').value;
+
+      console.log(type)
 
       // Create new table row
       const newRow = document.createElement('tr');
@@ -205,14 +209,14 @@
       newRow.appendChild(playerNameCell);
       newRow.appendChild(playTypeCell);
       newRow.appendChild(convertedCell);
-      newRow.appendchild(typeCell);
+      newRow.appendChild(typeCell);
       newRow.appendChild(dateCell);
 
       // Append new row to the table body
       tableBody.appendChild(newRow);
 
       // Add data to tableData array
-      tableData.push([playerName, playType, converted, date]);
+      tableData.push([playerName, playType, converted, type, date]);
 
       // Reset form fields
       statsForm.reset();
