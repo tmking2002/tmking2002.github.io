@@ -5,8 +5,8 @@
     /* Styles for the popup box */
     .popup {
       position: fixed;
-      top: 15%;
-      left: 12%;
+      top: 20%;
+      left: 88%;
       transform: translate(-50%, -50%);
       background-color: #f9f9f9;
       padding: 20px;
@@ -64,6 +64,15 @@
 </head>
 <body>
   <div class="popup">
+    <form id="typeForm">
+      <label for="type">Select a type:</label>
+      <select id="type" name="type" required>
+        <option value="game">Game</option>
+        <option value="practice">Practice</option>
+        <option value="scrimmage">Scrimmage</option>
+      </select>
+      <input type="submit" value="Submit">
+    </form>
     <form id="dateForm">
       <label for="date">Game date:</label>
       <input type="date" id="date" name="date" required>
@@ -78,9 +87,29 @@
         <label for="playerName">Player:</label>
         <select id="playerName" required>
           <option value="">Select Player</option>
-          <option value="sileo">Jin Sileo</option>
-          <option value="edgmon">Ella Edgmon</option>
+          <option value="allen">Sarah Beth Allen</option>
           <option value="black">Mallorie Black</option>
+          <option value="chapin">Bailey Chapin</option>
+          <option value="coffield">Makayla Coffield</option>
+          <option value="condon">Bri Condon</option>
+          <option value="connelly">Grace Connelly</option>
+          <option value="dennis">Chandler Dennis</option>
+          <option value="dobbins">Madison Dobbins</option>
+          <option value="domingue">Tiffany Domingue</option>
+          <option value="edgmon">Ella Edgmon</option>
+          <option value="gailey">Jayden Gailey</option>
+          <option value="hughes">Abby Hughes</option>
+          <option value="hillman">Gracie Hillman</option>
+          <option value="hunter">Reese Hunter</option>
+          <option value="minghini">Emma Minghini</option>
+          <option value="neleman">Blake Neleman</option>
+          <option value="norton">Kinsey Norton</option>
+          <option value="pritchett">Sandra Beth Pritchett</option>
+          <option value="sileo">Jin Sileo</option>
+          <option value="studebaker">Jaidyn Studebaker</option>
+          <option value="tucker">Gracyn Tucker</option>
+          <option value="voyles">Sophia Voyles</option>
+          <option value="vukadinovich">Paige Vukadinovich</option>
         </select>
 
         <label for="playType">Play Type:</label>
@@ -142,6 +171,7 @@
       
     dateForm.addEventListener('submit', function(e) {
       e.preventDefault();
+      typeForm.style.display = 'none';
       dateForm.style.display = 'none';
       tableContainer.style.display = 'block';
     });
@@ -167,12 +197,15 @@
       playTypeCell.textContent = playType;
       const convertedCell = document.createElement('td');
       convertedCell.textContent = converted;
+      const typeCell = document.createElement('td');
+      typeCell.textContent = type;
       const dateCell = document.createElement('td');
       dateCell.textContent = date;
 
       newRow.appendChild(playerNameCell);
       newRow.appendChild(playTypeCell);
       newRow.appendChild(convertedCell);
+      newRow.appendchild(typeCell);
       newRow.appendChild(dateCell);
 
       // Append new row to the table body
