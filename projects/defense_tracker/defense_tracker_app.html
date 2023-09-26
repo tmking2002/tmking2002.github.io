@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+
   <style>
     /* Styles for the popup box */
     .popup {
       position: fixed;
-      top: 20%;
-      left: 88%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       background-color: #f9f9f9;
       padding: 20px;
@@ -40,11 +42,6 @@
       cursor: pointer;
     }
       
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
     th, td {
       padding: 8px;
       text-align: left;
@@ -170,11 +167,19 @@
     const tableContainer = document.getElementById('tableContainer');
     const tableBody = document.querySelector('#statsTable tbody');
     const exportButton = document.getElementById('exportButton');  
-      
+
+    let csv_filename = '';
+
     dateForm.addEventListener('submit', function(e) {
       e.preventDefault();
+      const date = document.getElementById('date').value;
+      const type = document.getElementById('type').value;
+
+      csv_filename = type + '_' + date + '.csv';
+
       typeForm.style.display = 'none';
       dateForm.style.display = 'none';
+      popup.style.display = 'none';
       tableContainer.style.display = 'block';
     });
     
@@ -189,8 +194,8 @@
       const playerName = document.getElementById('playerName').value;
       const playType = document.getElementById('playType').value;
       const converted = document.getElementById('converted').value;
-      const type = document.getElementById('type').value;
       const date = document.getElementById('date').value;
+      const type = document.getElementById('type').value;
 
       // Create new table row
       const newRow = document.createElement('tr');
@@ -211,6 +216,23 @@
       newRow.appendChild(typeCell);
       newRow.appendChild(dateCell);
 
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.addEventListener('click', function() {
+        // Remove row from table
+        newRow.remove();
+        // Remove row from tableData array
+        const index = tableData.findIndex(row => row[0] === playerName && row[1] === playType && row[2] === converted && row[3] === type && row[4] === date);
+        if (index !== -1) {
+          tableData.splice(index, 1);
+        }
+        // Hide export button if table is empty
+        if (tableData.length === 0) {
+          exportButton.style.display = 'none';
+        }
+      });
+      newRow.appendChild(deleteButton);
+
       // Append new row to the table body
       tableBody.appendChild(newRow);
 
@@ -222,13 +244,10 @@
         exportButton.style.display = 'block';
       }
         
-      // Reset form fields
-      document.getElementById('playType').value = '';
-      document.getElementById('converted').value = '';
     });
-      
+
     exportButton.addEventListener('click', function() {
-      exportToCsv('table.csv', tableData);
+      exportToCsv(csv_filename, tableData);
     });
       
     // Function to export table data as CSV

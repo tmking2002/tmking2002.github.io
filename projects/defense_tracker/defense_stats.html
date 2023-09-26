@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV File Processing</title>
+</head>
+<body>
+    <h1>Combine and Group CSV Files</h1>
+
+    <!-- Input to select CSV files -->
+    <input type="file" id="fileInput" multiple>
+    <button onclick="processCSV()">Process CSV</button>
+
+    <!-- Display the result -->
+    <div id="result"></div>
+
+    <script>
+        // Function to process uploaded CSV files
+        function processCSV() {
+            const fileInput = document.getElementById('fileInput');
+            const resultDiv = document.getElementById('result');
+            const files = fileInput.files;
+
+            if (files.length === 0) {
+                resultDiv.innerHTML = 'No CSV files selected.';
+                return;
+            }
+
+            let combinedData = {};
+
+            // Loop through selected CSV files
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Check if the file is a CSV
+                if (file.name.endsWith('.csv')) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        const csvData = event.target.result;
+                        // Process CSV data (You would need to parse and combine here)
+                        // For simplicity, let's assume each CSV has a 'name' and 'value' column.
+                        // You need to modify this part to suit your CSV structure.
+
+                        // Example: Parse CSV data
+                        const lines = csvData.split('\n');
+                        for (let j = 1; j < lines.length; j++) { // Skip header row
+                            const columns = lines[j].split(',');
+                            const playerName = columns[0].trim();
+                            const value = parseFloat(columns[1].trim());
+
+                            if (!combinedData[playerName]) {
+                                combinedData[playerName] = 0;
+                            }
+
+                            combinedData[playerName] += value;
+                        }
+
+                        resultDiv.innerHTML = JSON.stringify(combinedData, null, 2);
+                    };
+
+                    reader.readAsText(file);
+                } else {
+                    resultDiv.innerHTML = 'Please select only CSV files.';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
