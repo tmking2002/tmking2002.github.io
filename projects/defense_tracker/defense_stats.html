@@ -1,70 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CSV File Processing</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plus D Stats</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+      
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
 </head>
 <body>
-    <h1>Combine and Group CSV Files</h1>
+  <h2 style="text-align: center; font-size: 50px">Plus D Stats</h2>
 
-    <!-- Input to select CSV files -->
-    <input type="file" id="fileInput" multiple>
-    <button onclick="processCSV()">Process CSV</button>
+  <!-- Dropdowns for filtering -->
+  <div style="margin-bottom: 20px;">
+    <label for="dateFilter">Filter by Date:</label>
+    <select id="dateFilter">
+    </select>
 
-    <!-- Display the result -->
-    <div id="result"></div>
+    <label for="typeFilter">Filter by Type:</label>
+    <select id="typeFilter">
+    </select>
 
-    <script>
-        // Function to process uploaded CSV files
-        function processCSV() {
-            const fileInput = document.getElementById('fileInput');
-            const resultDiv = document.getElementById('result');
-            const files = fileInput.files;
+    <button onclick="applyFilters()">Apply Filters</button>
+  </div>
 
-            if (files.length === 0) {
-                resultDiv.innerHTML = 'No CSV files selected.';
-                return;
-            }
+  <table id="statsTable">
+    <thead>
+      <tr>
+        <th>Player Name</th>
+        <th>Total Points</th>
+        <th>Total Opportunities</th>
+      </tr>
+    </thead>
+    <tbody id="statsTableBody"></tbody>
+  </table>
 
-            let combinedData = {};
-
-            // Loop through selected CSV files
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-
-                // Check if the file is a CSV
-                if (file.name.endsWith('.csv')) {
-                    const reader = new FileReader();
-
-                    reader.onload = function (event) {
-                        const csvData = event.target.result;
-                        // Process CSV data (You would need to parse and combine here)
-                        // For simplicity, let's assume each CSV has a 'name' and 'value' column.
-                        // You need to modify this part to suit your CSV structure.
-
-                        // Example: Parse CSV data
-                        const lines = csvData.split('\n');
-                        for (let j = 1; j < lines.length; j++) { // Skip header row
-                            const columns = lines[j].split(',');
-                            const playerName = columns[0].trim();
-                            const value = parseFloat(columns[1].trim());
-
-                            if (!combinedData[playerName]) {
-                                combinedData[playerName] = 0;
-                            }
-
-                            combinedData[playerName] += value;
-                        }
-
-                        resultDiv.innerHTML = JSON.stringify(combinedData, null, 2);
-                    };
-
-                    reader.readAsText(file);
-                } else {
-                    resultDiv.innerHTML = 'Please select only CSV files.';
-                }
-            }
-        }
-    </script>
+  <script>
+    // Fetch data from the server and populate dropdowns
+    fetch('/retrieve_stats')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+  
+        // Populate date and type dropdowns
+        const dateFilter = document.getElementById('dateFilter');
+        const typeFilter = document.getElementById('typeFilter');
+  
+        const uniqueDates = [...new Set(data.map(entry => entry.date))];
+        const uniqueTypes = [...new Set(data.map(entry => entry.type))];
+  
+        // Add options to date dropdown
+        uniqueDates.forEach(date => {
+          const option = document.createElement('option');
+          option.value = date;
+          option.textContent = date;
+          dateFilter.appendChild(option);
+        });
+  
+        // Add options to type dropdown
+        uniqueTypes.forEach(type => {
+          const option = document.createElement('option');
+          option.value = type;
+          option.textContent = type;
+          typeFilter.appendChild(option);
+        });
+  
+        // Update the DOM with the fetched data
+        updateTable(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  
+  // Function to apply filters
+  function applyFilters() {
+    const selectedDate = document.getElementById('dateFilter').value;
+    const selectedType = document.getElementById('typeFilter').value;
+  
+    fetch(`/filter_stats?date=${selectedDate}&type=${selectedType}`)
+      .then(response => response.json())
+      .then(filteredData => {
+        console.log('Filtered Data:', filteredData);
+        updateTable(filteredData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  
+  // Function to update the table
+  function updateTable(data) {
+    const tableBody = document.getElementById('statsTableBody');
+    // Clear existing rows
+    tableBody.innerHTML = '';
+  
+    // Aggregate values for each player
+    const playerData = {};
+  
+    data.forEach(entry => {
+      const playerName = entry.playerName;
+  
+      if (!playerData[playerName]) {
+        playerData[playerName] = {
+          playerName: playerName,
+          totalPoints: 0,
+          totalOpportunities: 0,
+        };
+      }
+  
+      // Increment total points and total opportunities based on the entry
+      if (entry.converted === '+') {
+        playerData[playerName].totalPoints += 1;
+      } else if (entry.converted === '-') {
+        playerData[playerName].totalPoints -= 1;
+      }
+  
+      playerData[playerName].totalOpportunities += 1;
+    });
+  
+    // Populate the table with aggregated data
+    Object.values(playerData).forEach(playerEntry => {
+      const row = tableBody.insertRow();
+      row.insertCell().textContent = playerEntry.playerName;
+      row.insertCell().textContent = playerEntry.totalPoints;
+      row.insertCell().textContent = playerEntry.totalOpportunities;
+    });
+  }
+  </script>
 </body>
 </html>

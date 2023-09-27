@@ -78,36 +78,36 @@
     </form>
   </div>
 
-  <h2 style="text-align: center; font-size: 50px">Defense Tracker</h2>
+  <h2 style="text-align: center; font-size: 50px">Plus D Input</h2>
 
   <div id="tableContainer" style="display: none;">
       <form id="statsForm">
         <label for="playerName">Player:</label>
         <select id="playerName" required>
           <option value="">Select Player</option>
-          <option value="allen">Sarah Beth Allen</option>
-          <option value="black">Mallorie Black</option>
-          <option value="chapin">Bailey Chapin</option>
-          <option value="coffield">Makayla Coffield</option>
-          <option value="condon">Bri Condon</option>
-          <option value="connelly">Grace Connelly</option>
-          <option value="dennis">Chandler Dennis</option>
-          <option value="dobbins">Madison Dobbins</option>
-          <option value="domingue">Tiffany Domingue</option>
-          <option value="edgmon">Ella Edgmon</option>
-          <option value="gailey">Jayden Gailey</option>
-          <option value="hughes">Abby Hughes</option>
-          <option value="hillman">Gracie Hillman</option>
-          <option value="hunter">Reese Hunter</option>
-          <option value="minghini">Emma Minghini</option>
-          <option value="neleman">Blake Neleman</option>
-          <option value="norton">Kinsey Norton</option>
-          <option value="pritchett">Sandra Beth Pritchett</option>
-          <option value="sileo">Jin Sileo</option>
-          <option value="studebaker">Jaidyn Studebaker</option>
-          <option value="tucker">Gracyn Tucker</option>
-          <option value="voyles">Sophia Voyles</option>
-          <option value="vukadinovich">Paige Vukadinovich</option>
+          <option value="Sarah Beth Allen">Sarah Beth Allen</option>
+          <option value="Mallorie Black">Mallorie Black</option>
+          <option value="Bailey Chapin">Bailey Chapin</option>
+          <option value="Makayla Coffield">Makayla Coffield</option>
+          <option value="Bri Condon">Bri Condon</option>
+          <option value="Grace Connelly">Grace Connelly</option>
+          <option value="Chandler Dennis">Chandler Dennis</option>
+          <option value="Madison Dobbins">Madison Dobbins</option>
+          <option value="Tiffany Domingue">Tiffany Domingue</option>
+          <option value="Ella Edgmon">Ella Edgmon</option>
+          <option value="Jayden Gailey">Jayden Gailey</option>
+          <option value="Abby Hughes">Abby Hughes</option>
+          <option value="Gracie Hillman">Gracie Hillman</option>
+          <option value="Reese Hunter">Reese Hunter</option>
+          <option value="Emma Minghini">Emma Minghini</option>
+          <option value="Blake Neleman">Blake Neleman</option>
+          <option value="Kinsey Norton">Kinsey Norton</option>
+          <option value="Sandra Beth Pritchett">Sandra Beth Pritchett</option>
+          <option value="Jin Sileo">Jin Sileo</option>
+          <option value="Jaidyn Studebaker">Jaidyn Studebaker</option>
+          <option value="Gracyn Tucker">Gracyn Tucker</option>
+          <option value="Sophia Voyles">Sophia Voyles</option>
+          <option value="Paige Vukadinovich">Paige Vukadinovich</option>
         </select>
 
         <label for="playType">Play Type:</label>
@@ -156,119 +156,11 @@
         </tbody>
       </table>
 
-      <button id="exportButton" style="display: none;">Export to CSV</button> 
+      <button id="uploadDataButton" onclick="uploadData()" style="display: none;">Upload Data</button> 
+
+      <div id="status"></div>
+
+      <script src="defense_input_app.js"></script>
     </div>
-    
-  <script>
-    // Get form values
-    const dateForm = document.getElementById('dateForm');
-    const statsForm = document.getElementById('statsForm');
-    const popup = document.querySelector('.popup');
-    const tableContainer = document.getElementById('tableContainer');
-    const tableBody = document.querySelector('#statsTable tbody');
-    const exportButton = document.getElementById('exportButton');  
-
-    let csv_filename = '';
-
-    dateForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const date = document.getElementById('date').value;
-      const type = document.getElementById('type').value;
-
-      csv_filename = type + '_' + date + '.csv';
-
-      typeForm.style.display = 'none';
-      dateForm.style.display = 'none';
-      popup.style.display = 'none';
-      tableContainer.style.display = 'block';
-    });
-    
-    let tableData = [
-        ['player', 'type', 'converted', 'type', 'date']
-    ];
-      
-    // Event listener for form submission
-    document.getElementById('statsForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const playerName = document.getElementById('playerName').value;
-      const playType = document.getElementById('playType').value;
-      const converted = document.getElementById('converted').value;
-      const date = document.getElementById('date').value;
-      const type = document.getElementById('type').value;
-
-      // Create new table row
-      const newRow = document.createElement('tr');
-      const playerNameCell = document.createElement('td');
-      playerNameCell.textContent = playerName;
-      const playTypeCell = document.createElement('td');
-      playTypeCell.textContent = playType;
-      const convertedCell = document.createElement('td');
-      convertedCell.textContent = converted;
-      const typeCell = document.createElement('td');
-      typeCell.textContent = type;
-      const dateCell = document.createElement('td');
-      dateCell.textContent = date;
-
-      newRow.appendChild(playerNameCell);
-      newRow.appendChild(playTypeCell);
-      newRow.appendChild(convertedCell);
-      newRow.appendChild(typeCell);
-      newRow.appendChild(dateCell);
-
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', function() {
-        // Remove row from table
-        newRow.remove();
-        // Remove row from tableData array
-        const index = tableData.findIndex(row => row[0] === playerName && row[1] === playType && row[2] === converted && row[3] === type && row[4] === date);
-        if (index !== -1) {
-          tableData.splice(index, 1);
-        }
-        // Hide export button if table is empty
-        if (tableData.length === 0) {
-          exportButton.style.display = 'none';
-        }
-      });
-      newRow.appendChild(deleteButton);
-
-      // Append new row to the table body
-      tableBody.appendChild(newRow);
-
-      // Add data to tableData array
-      tableData.push([playerName, playType, converted, type, date]);
-
-      // Show export button if table has data
-      if (tableData.length > 0) {
-        exportButton.style.display = 'block';
-      }
-        
-    });
-
-    exportButton.addEventListener('click', function() {
-      exportToCsv(csv_filename, tableData);
-    });
-      
-    // Function to export table data as CSV
-    function exportToCsv(filename, data) {
-      const csv = data.map(row => row.join(',')).join('\n');
-      const csvBlob = new Blob([csv], { type: 'text/csv' });
-
-      // Create a temporary link element to download the CSV file
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(csvBlob);
-      link.download = filename;
-      link.style.display = 'none';
-      document.body.appendChild(link);
-
-      // Simulate a click on the link to trigger the download
-      link.click();
-
-      // Clean up
-      document.body.removeChild(link);
-    }
-      
-  </script>
 </body>
 </html>
