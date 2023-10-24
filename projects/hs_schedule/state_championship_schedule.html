@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2023 GHSA Softball State Championship Schedule</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+    
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+    
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    
+        tr:hover {
+            background-color: #e0e0e0;
+        }
+
+        .dropdown-container {
+            text-align: center;
+            margin: 50px;
+        }
+
+        .dropdown-container label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        select {
+            font-size: 18px; 
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">2023 GHSA Softball State Championship Schedule</h1>
+    <div class="dropdown-container">
+        <label for="dateDropdown">Select Date:</label>
+        <select id="dateDropdown">
+            <option value="all">All</option>
+        </select>
+        <label for="teamDropdown">Select Team:</label>
+        <select id="teamDropdown">
+            <option value="all">All</option>
+        </select>
+    </div>
+    <table id="scheduleTable">
+        <thead>
+            <tr>
+                <th>Game ID</th>
+                <th>Division</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Field</th>
+                <th>Team 1</th>
+                <th>Team 2</th>
+            </tr>
+        </thead>
+        <tbody id="scheduleBody">
+        </tbody>
+    </table>
+
+    <script>
+        // Function to parse the CSV file
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const headers = lines[0].split(',');
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length === headers.length) {
+                    const entry = {};
+                    for (let j = 0; j < headers.length; j++) {
+                        entry[headers[j]] = values[j];
+                    }
+                    data.push(entry);
+                }
+            }
+            return data;
+        }
+
+        // Function to populate the dropdowns and table
+        function populateData(scheduleData) {
+            const dateDropdown = document.getElementById("dateDropdown");
+            const teamDropdown = document.getElementById("teamDropdown");
+            const scheduleTable = document.getElementById("scheduleTable");
+            const scheduleBody = document.getElementById("scheduleBody");
+
+            // Extract unique dates, team 1, and team 2 names
+            const uniqueDates = [...new Set(scheduleData.map(item => item.date))];
+            const uniqueTeams = [...new Set(scheduleData.map(item => item.team1).concat(scheduleData.map(item => item.team2)))];
+            uniqueTeams.sort();
+
+            const filteredTeams = uniqueTeams.filter(team => !/winner|loser/i.test(team));
+
+            // Populate date dropdown
+            dateDropdown.innerHTML = "<option value='all'>All</option>";
+            uniqueDates.forEach(date => {
+                const option = document.createElement("option");
+                option.value = date;
+                option.text = date;
+                dateDropdown.appendChild(option);
+            });
+
+            // Populate team dropdown
+            teamDropdown.innerHTML = "<option value='all'>All</option>";
+            filteredTeams.forEach(team => {
+                const option = document.createElement("option");
+                option.value = team;
+                option.text = team;
+                teamDropdown.appendChild(option);
+            });
+
+            // Function to filter the table based on dropdown selections
+            function filterTable() {
+                const selectedDate = dateDropdown.value;
+                const selectedTeam = teamDropdown.value;
+
+                scheduleTable.querySelectorAll('tr').forEach(row => {
+                    const dateCell = row.querySelector('td:nth-child(3)');
+                    const team1Cell = row.querySelector('td:nth-child(6)');
+                    const team2Cell = row.querySelector('td:nth-child(7)');
+
+                    if (dateCell && team1Cell && team2Cell) {
+                        const showRow = (selectedDate === 'all' || dateCell.textContent === selectedDate) &&
+                            (selectedTeam === 'all' || team1Cell.textContent === selectedTeam || team2Cell.textContent === selectedTeam);
+
+                        row.style.display = showRow ? '' : 'none';
+                    }
+                });
+            }
+
+            dateDropdown.addEventListener('change', filterTable);
+            teamDropdown.addEventListener('change', filterTable);
+
+            // Populate the table with all data
+            scheduleData.forEach(item => {
+                const row = scheduleTable.insertRow(-1);
+                const cellGameID = row.insertCell(0);
+                const cellDivision = row.insertCell(1);
+                const cellDate = row.insertCell(2);
+                const cellTime = row.insertCell(3);
+                const cellField = row.insertCell(4);
+                const cellTeam1 = row.insertCell(5);
+                const cellTeam2 = row.insertCell(6);
+
+                cellGameID.innerHTML = item.game_id;
+                cellDivision.innerHTML = item.division;
+                cellDate.innerHTML = item.date;
+                cellTime.innerHTML = item.time;
+                cellField.innerHTML = item.field;
+                cellTeam1.innerHTML = item.team1;
+                cellTeam2.innerHTML = item.team2;
+            });
+        }
+
+        // Read the CSV file
+        fetch('state_championship_master.csv')
+            .then(response => response.text())
+            .then(data => {
+                const scheduleData = parseCSV(data);
+                populateData(scheduleData);
+            })
+            .catch(error => console.error(error));
+    </script>
+</body>
+</html>
