@@ -78,13 +78,11 @@
             const data = [];
             for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(',');
-                if (values.length === headers.length) {
-                    const entry = {};
-                    for (let j = 0; j < headers.length; j++) {
-                        entry[headers[j]] = values[j];
-                    }
-                    data.push(entry);
+                const entry = {};
+                for (let j = 0; j < headers.length; j++) {
+                    entry[headers[j]] = values[j];
                 }
+                data.push(entry);
             }
             return data;
         }
