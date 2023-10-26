@@ -82,10 +82,13 @@
                     for (let j = 0; j < headers.length; j++) {
                         entry[headers[j]] = values[j];
                     }
-                    data.push(entry);
+                    // if entry[division] is undefined, dont push it
+                    if(entry['division_id'] != undefined){
+                        data.push(entry);
+                    }
                 }
-            }
             return data;
+        }
 
         // Function to populate the dropdowns and table
         function populateData(scheduleData) {
