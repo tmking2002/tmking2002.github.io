@@ -79,13 +79,13 @@
             for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(',');
                 const entry = {};
-                for (let j = 0; j < headers.length; j++) {
-                    entry[headers[j]] = values[j];
+                    for (let j = 0; j < headers.length; j++) {
+                        entry[headers[j]] = values[j];
+                    }
+                    data.push(entry);
                 }
-                data.push(entry);
             }
             return data;
-        }
 
         // Function to populate the dropdowns and table
         function populateData(scheduleData) {
