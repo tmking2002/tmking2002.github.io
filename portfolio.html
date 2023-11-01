@@ -1,181 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>Tyson King - Portfolio</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', Arial, sans-serif;
+            text-align: center;
+        }
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LMKQBFKL2F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        #header {
+            background-color: black;
+            color: white;
+            font-size: 5vw;
+            padding: 1vw;
+            font-family: 'Poppins', Arial, sans-serif;
+            text-align: center;
+            padding-top: 70px;
+        }
 
-  gtag('config', 'G-LMKQBFKL2F');
-</script>
-    
-<title>Tyson King Portfolio</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-* {
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
+        #navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 80%;
+            background-color: black;
+            color: white;
+            font-size: 1.5vw;
+            padding: 10px;
+            padding-right: 10%;
+            text-align: right;
+        }
 
-body {
-  margin: 0;
-  font-family: Montserrat sans-serif;
-}
+        a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
 
-.title {
-    text-align: center
-}
-    
-/* Style the top navigation bar */
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
+        a:hover {
+            color: #c9c9c9;
+        }
 
-/* Style the topnav links */
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
+        #home-button {
+            position: absolute;
+            left: 10px;
+        }
 
-/* Change color on hover */
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
+        .project-thumbnail {
+            cursor: pointer;
+            transition: all 0.5s;
+            padding-right: 3vw;
+            padding-left: 3vw;
+            padding-top: 2vw;
+            padding-bottom: 2vw;
+        }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-}
-.project {
-    padding: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #CCCCCC;
-}
-.project:last-child {
-    border-bottom: none;
-}
-.project h2 {
-    margin-top: 0;
-}
-.project p {
-	margin-bottom: 0;
-}
-.project a {
-  text-decoration: none; /* Removes the underline */
-  color: #0077b5; /* Changes the text color to blue */
-}
+        .project-thumbnail:hover {
+            transform: scale(1.1);
+        }
 
-.project a:hover {
-  color: #005f91;
-}    
+        .active-thumbnail {
+            width: 80vw; /* Adjust the width for the selected thumbnail */
+            z-index: 1; /* Bring the selected thumbnail to the front */
+        }
 
-.project-logo {
-  float: right;
-  margin-top: -75px;
-}
-    
-/* Style the content */
-.content {
-  background-color: #ddd;
-  padding: 10px;
-}
+        .inactive-thumbnail {
+            display: none;
+        }
 
-/* Style the footer */
-.footer {
-  background-color: #f1f1f1;
-  padding: 10px;
-}
+        .project-details {
+            color: white;
+            display: none;
+            width: 40%;
+            margin: 0 auto;
+        }
 
-a {
-  text-decoration: none; /* Removes the underline */
-  color: #0077b5; /* Changes the text color to blue */
-}
+        #project-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 50px;
+        }
 
-a:hover {
-  color: #005f91;
-}
+        #project-details-container .project-details.active {
+            display: block;
+        }
 
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+        #back-button {
+            display: none; /* Initially hidden */
+            padding: 10px;
+        }
 
-
-</style>
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <script src="https://kit.fontawesome.com/4dfc8d0116.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <div id="navbar">
+        <a id="home-button" href="index.html">Home</a>
+        <a href="https://www.linkedin.com/in/tyson-king-b309131a1/">
+            <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="https://www.twitter.com/tking0426">
+            <i class="fab fa-twitter"></i>
+        </a>
+        <a href="portfolio.html" style="background-color: #c9c9c9; color: black; border-radius: 5px">Portfolio</a>
+        <a href="resume.pdf">Resume</a>
+    </div>
+    <div id="project-container">
+        <a id="back-button" href="portfolio.html">
+            <i class="fa-solid fa-backward fa-2x"></i>
+        </a>
+    </div>
+    <div id="project-container" style="padding-top: 20px;">
+        <div class="project-thumbnail">
+            <img src="images/softballstatline_logo.png" alt="Softball Statline Logo" onclick="showProject(1)" style="width: 20vw">
+        </div>
+        <div class="project-thumbnail">
+            <img src="images/softballR_logo.png" alt="softballR Logo" onclick="showProject(2)" style="width: 20vw">
+        </div>
+        <div class="project-thumbnail">
+            <img src="images/pow_predictor_logo.png" alt="POW Predictor Logo" onclick="showProject(3)" style="width: 20vw">
+        </div>
+    </div>
+    <div id="project-details-container">
+        <div class="project-details" id="project1" style="margin-top: 2vw">
+            <a href="https://www.softballstatline.com">
+                <i class="fa-solid fa-globe fa-2x"></i>
+            </a>
+            <a href="https://www.twitter.com/SBStatline">
+                <i class="fab fa-twitter fa-2x"></i>
+            </a>
+            <a href="https://github.com/tmking2002/softball-statline">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <p style="margin-top: 10px">Softball Statline is a website that provides for easy access to historical archived NCAA softball statistics. What started as a passion project to help grow the game has turned into a one-stop shop for casual softball fans, diehards, and coaches alike to access the statistics of their favorite players.</p>
+            <p style="margin-top: 10px">I scraped this data over the past year from the NCAA stats archive using a scraper I built in R. I built the website using just HTML, CSS, and JS with the help of Jekyll.</p>
+            <p style="margin-top: 10px">Check out the link above to check out the site for yourself!</p>
+        </div>
+        <div class="project-details" id="project2">
+            <a href="https://www.github.com/tmking2002/softballR">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="https://tmking2002.github.io/projects/softballR_tutorial/softballR_tutorial.html">
+                <i class="fa-solid fa-book-open fa-2x"></i>
+            </a>
+            <p style="margin-top: 10px">softballR is an R package I built with functionality to scrape, organize and dynamically load softball data and was designed to be user-friendly for a newcomer to programming. The package allows easy access to historical scores, player stats, rankings, and much more.</p>
+            <p style="margin-top: 10px">Click the links above to see the GitHub repository and a tutorial that I wrote to help newbies get started.</p>
+        </div>
+        <div class="project-details" id="project3">
+            <a href="https://www.twitter.com/POW_Predictor">
+                <i class="fab fa-twitter fa-2x"></i>
+            </a>
+            <h2>POW Predictor</h2>
+            <p style="margin-top: 10px">My NBA Player of the Week predictor bot was a short-lived project that I worked on for the 2022-23 NBA season. I using data from the hoopR package and several other online sources to create a logistic regression model to predict the NBA's player of the week winners.</p>
+            <p style="margin-top: 10px">I utilized github actions and Twitter's old API (RIP) to create a twitter bot to post my predictions several times per week.</p>
+        </div>
+    </div>
+    <script>
+        function showProject(projectId) {
+            // Hide all project details
+            var projectDetails = document.getElementsByClassName("project-details");
+            for (var i = 0; i < projectDetails.length; i++) {
+                projectDetails[i].classList.remove("active");
+            }
 
-<div class="topnav">
-  <a href="/">Home</a>
-  <a href="">Projects</a>
-  <a href="resume">Resume</a>
-</div>
+            // Show the selected project details
+            var projectDetail = document.getElementById("project" + projectId);
+            projectDetail.classList.add("active");
 
-<div class="content">
-    
-    <body>
-    
-    <div class="title"><h1>Projects</h1></div>
-        
-    <div class="container">
-        <div class="project">
-			<h2><a href="projects/softballR_tutorial/softballR_tutorial.html">softballR Package</a></h2>
-            <div class="project-logo">
-                <img src="images/softballR_logo.png" alt="softballR logo">
-            </div>
-			<p style="max-width: 400px;">I created an R package with the purpose of scraping and cleaning NCAA softball data. As of right now, the package can scrape play-by-play, scoreboards, and box scores from the NCAA and ESPN websites as well as pulling current rankings from a few websites including Massey Ratings and USA Today. </p>
-		</div>
-        
-        <div class="project">
-			<h2><a href="projects/power_rankings/power_rankings_D1.html">NCAA Softball Power Rankings</a></h2>
-            <div class="project-logo">
-                <img src="images/ncaa_softball_logo.png" alt="NCAA logo">
-            </div>
-			<p style="max-width: 400px;">Using data from my package and a linear regression model, I was able to create a power rankings model that has accurately predicted the winner of over 67% of games this season. The basis of the ratings system is that it gives teams credit for winning games by a larger margin and losing close games (setting it apart from RPI).</p>
-		</div>
-        
-        <div class="project">
-			<h2><a href="projects/top_players/top_hitters.html">NCAA Softball Top Players</a></h2>
-			<p style="max-width: 400px;">Using data scraped from the NCAA website, I accumulated all of the box score data for the entire 2023 season and created my own all-encompassing stats to evaluate hitter and pitcher ability (wOBA and wFIP) that account for strength of schedule.</p>
-		</div>
-        
-        <div class="project">
-			<h2><a href="projects/acc_predictions/3_30.html">ACC Softball Tournament Projections</a></h2>
-            <div class="project-logo">
-                <img src="images/acc_logo.png" alt="ACC logo">
-            </div>
-			<p style="max-width: 400px;">Using data from my package ('load_ncaa_scoreboard') and a model based on my own power rating system, I wrote a program in R that simulates the remainder of the ACC softball season and finds their probabilities to achieve certain thresholds of sucess (top 3, top6, top10, etc.) and their remaining strength of schedule. Here's a link to the <a href="https://github.com/tmking2002/softball-projects/blob/main/ACC%20Softball%20Analytics/sim_season/acc_season_sims.R">GitHub.</a></p>
-		</div>
-        
-		<div class="project">
-            <h2><a href="https://github.com/tmking2002/POW-Bot">Player of the Week Predictor Twitter Bot</a></h2>
-            <div class="project-logo">
-                <a href="https://twitter.com/pow_predictor"><img src="images/predictor_bot_logo.jpeg" alt="POW Bot logo"></a>
-            </div>
-			<p style="max-width: 400px;">I created a Twitter bot that uses a logistic regression model trained on data from the 2001-2022 seasons to predict the player of the week. </p>
-		</div>
-	</div>
-    
-    </body>
-    
-</div>
+            // Make the selected thumbnail active
+            var thumbnails = document.querySelectorAll(".project-thumbnail");
+            for (var i = 0; i < thumbnails.length; i++) {
+                thumbnails[i].classList.remove("active-thumbnail");
+                thumbnails[i].classList.add("inactive-thumbnail");
+            }
+            thumbnails[projectId - 1].classList.add("active-thumbnail");
+            thumbnails[projectId - 1].classList.remove("inactive-thumbnail");
 
-<div class="footer">
-  <p></p>
-</div>
-
+            document.getElementById("back-button").style.display = "block";
+            console.log(document.getElementById("back-button"));
+        }
+    </script>
 </body>
 </html>
-
-
