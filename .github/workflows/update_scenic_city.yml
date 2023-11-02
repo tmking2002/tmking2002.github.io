@@ -1,0 +1,24 @@
+name: update_scenic_city
+
+on:
+  schedule:
+    - cron:  '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-scoreboard-db:
+    runs-on: macOS-latest
+    env: 
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v2
+      - name: Update scenic city schedule viewer
+        run: Rscript get_scenic_city.R
+      - name: commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "Update NCAA Scoreboard" -a || echo "No changes to commit."
+          git push origin main || "No changes to commit."
