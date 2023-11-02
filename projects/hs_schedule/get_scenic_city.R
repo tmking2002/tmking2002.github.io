@@ -2,13 +2,13 @@ install.packages("tidyverse")
 install.packages("rvest")
 install.packages("magrittr")
 install.packages("janitor")
+install.packages("anytime")
 
 library(tidyverse)
 library(rvest)
 library(magrittr)
 library(janitor)
-
-
+library(anytime)
 
 schedule_1 <- "https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h20230821170245450d5f59e3badd64b&IDDivision=h2023100220310056588c707e9408541" %>% 
   read_html() %>% 
@@ -76,7 +76,11 @@ teams_to_watch <- c("Rock Gold Manetta", "Georgia Impact Holcombe", "Birmingham 
                     "Birmingham Thunderbolts Premier 2025 Kemp", "Fury Platinum National Chiles- Powered by SCT")
 
 schedule_final <- rbind(schedule_1, schedule_2) %>% 
-  filter(team_1 %in% teams_to_watch | team_2 %in% teams_to_watch)
+  filter(team_1 %in% teams_to_watch | team_2 %in% teams_to_watch) %>% 
+  mutate(date_time = paste(date, time),
+         date_time = strptime(date_time, format = "%m/%d/%y %I:%M %p")) %>% 
+  arrange(date_time, venue) %>% 
+  select(-date_time)
 
 
 write_csv(schedule_final, "projects/hs_schedule/scenic_city_schedule.csv")
