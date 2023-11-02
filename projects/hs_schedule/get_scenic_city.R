@@ -8,10 +8,25 @@ library(rvest)
 library(magrittr)
 library(janitor)
 
-schedule_1 <- "https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h20230821170245450d5f59e3badd64b&IDDivision=h202310022031005913345b65e1bfb4c" %>% 
+
+
+schedule_1 <- "https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h20230821170245450d5f59e3badd64b&IDDivision=h2023100220310056588c707e9408541" %>% 
   read_html() %>% 
-  html_table() %>% 
-  extract2(15) %>% 
+  html_table()
+
+max_rows <- -1
+max_index <- -1
+
+for (i in 1:length(schedule_1)) {
+  n_rows <- nrow(schedule_1[[i]])
+  if (n_rows > max_rows) {
+    max_rows <- n_rows
+    max_index <- i
+  }
+}
+
+schedule_1 <- schedule_1 %>% 
+  extract2(max_index) %>% 
   row_to_names(1) %>% 
   clean_names() %>% 
   filter(!(game %in% c("×\r\n                            \r\n                        \r\n                    \r\n                    \r\n                        \r\n                            \r\n                                ×",
@@ -24,10 +39,24 @@ schedule_1 <- "https://tourneymachine.com/Public/Results/Division.aspx?IDTournam
   separate(team_2, c("team_2", "pool"), " \\(") %>% 
   select(game, date, time, venue, field_num, team_1, team_2)
 
-schedule_2 <- "https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h20230821170245450d5f59e3badd64b&IDDivision=h2023100220310056588c707e9408541" %>% 
+schedule_2 <- "https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h20230821170245450d5f59e3badd64b&IDDivision=h202310022031005913345b65e1bfb4c" %>% 
   read_html() %>% 
-  html_table() %>% 
-  extract2(15) %>% 
+  html_table()
+
+max_rows <- -1
+max_index <- -1
+
+for (i in 1:length(schedule_2)) {
+  n_rows <- nrow(schedule_2[[i]])
+  if (n_rows > max_rows) {
+    max_rows <- n_rows
+    max_index <- i
+  }
+}
+
+
+schedule_2 <- schedule_2 %>% 
+  extract2(max_index) %>% 
   row_to_names(1) %>% 
   clean_names() %>% 
   filter(!(game %in% c("×\r\n                            \r\n                        \r\n                    \r\n                    \r\n                        \r\n                            \r\n                                ×",
