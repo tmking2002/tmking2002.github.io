@@ -35,8 +35,8 @@ schedule_1 <- schedule_1 %>%
   separate(time, c("date", "time"), "\r\n                    \r\n                    ") %>% 
   mutate(date = str_remove(date, "Fri |Sat |Sun ")) %>% 
   rename(team_1 = team) %>% 
-  separate(team_1, c("team_1", "pool"), " \\(") %>% 
-  separate(team_2, c("team_2", "pool"), " \\(") %>% 
+  mutate(team_1 = gsub(" Pool [A-Z]*|\\*", "", team_1),
+         team_2 = gsub(" Pool [A-Z]*|\\*", "", team_2)) %>% 
   select(game, date, time, venue, field_num, team_1, team_2)
 
 schedule_2 <- "https://tourneymachine.com/Public/Results/Division.aspx?IDTournament=h20230821170245450d5f59e3badd64b&IDDivision=h202310022031005913345b65e1bfb4c" %>% 
@@ -65,18 +65,21 @@ schedule_2 <- schedule_2 %>%
   separate(time, c("date", "time"), "\r\n                    \r\n                    ") %>% 
   mutate(date = str_remove(date, "Fri |Sat |Sun ")) %>% 
   rename(team_1 = team) %>% 
-  separate(team_1, c("team_1", "pool"), " \\(") %>% 
-  separate(team_2, c("team_2", "pool"), " \\(") %>% 
+  mutate(team_1 = gsub(" Pool [A-Z]*|\\*", "", team_1),
+         team_2 = gsub(" Pool [A-Z]*|\\*", "", team_2)) %>% 
   select(game, date, time, venue, field_num, team_1, team_2)
 
 teams_to_watch <- c("Rock Gold Manetta", "Georgia Impact Holcombe", "Birmingham Thunderbolts Premier 2027-Alford", "GA Impact Maher", 
                     "LLG Elite", "Tampa Mustangs PBell 2026/2027", "Top Gun 16U National - Slezak", "Indiana Magic Gold Bennett/Goddard", "Turnin2 Robeson / Long", "Starz Gold Bunn", 
                     "Unity meadows/Johnson", "LLG Elite", "Fury Platinum X - Hutchins", "Fury Platinum X Hutchins Helton", 
                     "Birmingham Thunderbolts Premier 2026 - Thompson", "Birmingham Thunderbolts Premier 2027-Alford", "Georgia Impact Premier Caymol",
-                    "Birmingham Thunderbolts Premier 2025 Kemp", "Fury Platinum National Chiles- Powered by SCT")
+                    "Birmingham Thunderbolts Premier 2025 Kemp", "Fury Platinum National Chiles- Powered by SCT", "GA Impact Taylor", "GA Impact Maher",
+                    "Aces Fastpitch", "Hotshots National ATL", "Select Fastpitch", "TAMPA MUSTANGES RENE", "Tampa Mustangs Seymour",
+                    "Birmingham Thunderbolts Premier 2027-Alford")
 
 schedule_final <- rbind(schedule_1, schedule_2) %>% 
-  filter(team_1 %in% teams_to_watch | team_2 %in% teams_to_watch) %>% 
+  filter(str_detect(team_1, paste(teams_to_watch, collapse = "|")) | 
+         str_detect(team_2, paste(teams_to_watch, collapse = "|"))) %>% 
   mutate(date_time = paste(date, time),
          date_time = strptime(date_time, format = "%m/%d/%y %I:%M %p")) %>% 
   arrange(date_time, venue) %>% 
